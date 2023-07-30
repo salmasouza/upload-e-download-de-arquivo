@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
 import java.util.*;
 
 @RestController
@@ -58,6 +59,30 @@ public class FuncionarioControler {
     public List<Funcionario> findAllByOrderByNome( ) {
         return service.findAllByOrderByNome();
     }
+    @GetMapping("/data")
+    public List<Funcionario>  findByDataNascimento() {
+        return service.findByDataNascimento();
+    }
+
+
+
+
+    @GetMapping("/mais-velho")
+    public ResponseEntity<String> buscarFuncionarioMaisVelho() {
+        // Buscar o funcionário com a maior idade.
+        Optional<Funcionario> funcionarioMaisVelho = service.buscarFuncionarioMaisVelho();
+        if (funcionarioMaisVelho.isPresent()) {
+            // Calcular a idade do funcionário mais velho.
+            int idade =service.calcularIdade(funcionarioMaisVelho.get());
+            return ResponseEntity.ok("Funcionário mais velho: " + funcionarioMaisVelho.get().getNome() + ", Idade: " + idade);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+
+
+
 
     @GetMapping("/funcionarios/aumentar-salarios")
     public ResponseEntity<List<Funcionario>> aumentarSalarios() {

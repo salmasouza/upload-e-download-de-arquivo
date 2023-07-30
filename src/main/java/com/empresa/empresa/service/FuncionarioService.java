@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -60,6 +61,22 @@ public class FuncionarioService {
     public List<Funcionario> findAllByOrderByNome( ) {
         return repository.findAllByOrderByNome();
     }
+
+    public List<Funcionario> findByDataNascimento() {
+        return repository.findByDataNascimento();
+    }
+
+    public Optional<Funcionario> buscarFuncionarioMaisVelho() {
+        return repository.findFirstByOrderByDataNascimentoDesc();
+    }
+
+    public int calcularIdade(Funcionario funcionario) {
+        LocalDate dataNascimento = funcionario.getDataNascimento();
+        LocalDate dataAtual = LocalDate.now();
+        return Period.between(dataNascimento, dataAtual).getYears();
+    }
+
+
 
     public ResponseEntity<List<Funcionario>> aumentarSalarios() {
         List<Funcionario> funcionarios = repository.findAll();
